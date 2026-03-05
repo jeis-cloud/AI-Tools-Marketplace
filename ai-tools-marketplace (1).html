@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Tools Marketplace — Just Ask AVA</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f6fa;
+    --bg2: #ffffff;
+    --bg3: #eef0f6;
+    --border: rgba(30,40,80,0.1);
+    --accent: #2b3a8f;
+    --accent2: #5b6fd6;
+    --accent3: #e05a5a;
+    --text: #1a2040;
+    --muted: #7a82a0;
+    --card-bg: #ffffff;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .nav-logo {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 800;
+    font-size: 1.1rem;
+    letter-spacing: -0.02em;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .nav-logo span {
+    color: var(--accent2);
+  }
+
+  .nav-dot {
+    width: 8px; height: 8px;
+    background: var(--accent2);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--text); }
+
+  /* HERO */
+  .hero {
+    padding: 6rem 2rem 4rem;
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+    position: relative;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: rgba(43,58,143,0.08);
+    border: 1px solid rgba(43,58,143,0.2);
+    color: var(--accent);
+    font-size: 0.78rem;
+    font-weight: 500;
+    padding: 0.3rem 0.8rem;
+    border-radius: 100px;
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .hero h1 {
+    font-family: 'Poppins', sans-serif;
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    margin-bottom: 1.2rem;
+  }
+
+  .hero h1 em {
+    font-style: normal;
+    color: var(--accent2);
+  }
+
+  .hero p {
+    color: var(--muted);
+    font-size: 1.1rem;
+    max-width: 540px;
+    margin: 0 auto 2.5rem;
+    font-weight: 300;
+  }
+
+  /* SEARCH */
+  .search-wrap {
+    position: relative;
+    max-width: 560px;
+    margin: 0 auto;
+  }
+
+  .search-wrap input {
+    width: 100%;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.95rem;
+    padding: 0.9rem 1rem 0.9rem 3rem;
+    border-radius: 12px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .search-wrap input:focus {
+    border-color: rgba(43,58,143,0.4);
+    box-shadow: 0 0 0 3px rgba(43,58,143,0.08);
+  }
+
+  .search-wrap input::placeholder { color: var(--muted); }
+
+  .search-icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted);
+    font-size: 1rem;
+  }
+
+  /* STATS */
+  .stats {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    padding: 2rem;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    margin: 0 2rem;
+  }
+
+  .stat { text-align: center; }
+
+  .stat-num {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--accent);
+    letter-spacing: -0.03em;
+  }
+
+  .stat-label {
+    font-size: 0.8rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  /* MAIN LAYOUT */
+  .main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 3rem 2rem;
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 2rem;
+  }
+
+  /* SIDEBAR FILTERS */
+  .sidebar {
+    position: sticky;
+    top: 80px;
+    height: fit-content;
+  }
+
+  .filter-section {
+    margin-bottom: 2rem;
+  }
+
+  .filter-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.8rem;
+  }
+
+  .filter-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.88rem;
+    padding: 0.45rem 0.7rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: left;
+  }
+
+  .filter-btn:hover { background: var(--bg3); color: var(--text); }
+  .filter-btn.active { background: rgba(43,58,143,0.08); color: var(--accent); }
+
+  .filter-count {
+    margin-left: auto;
+    font-size: 0.75rem;
+    background: var(--bg3);
+    padding: 0.1rem 0.45rem;
+    border-radius: 100px;
+    color: var(--muted);
+  }
+
+  .filter-btn.active .filter-count {
+    background: rgba(43,58,143,0.12);
+    color: var(--accent);
+  }
+
+  /* TOOLS GRID */
+  .tools-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+  }
+
+  .tools-count {
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  .tools-count strong { color: var(--text); }
+
+  .sort-select {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.85rem;
+    padding: 0.4rem 0.8rem;
+    border-radius: 8px;
+    outline: none;
+    cursor: pointer;
+  }
+
+  .tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1rem;
+  }
+
+  /* TOOL CARD */
+  .tool-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.4rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+    animation: fadeUp 0.4s ease both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .tool-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(43,58,143,0.03) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .tool-card:hover {
+    border-color: rgba(43,58,143,0.2);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(30,40,80,0.1);
+  }
+
+  .tool-card:hover::before { opacity: 1; }
+
+  .card-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.9rem;
+    margin-bottom: 1rem;
+  }
+
+  .tool-logo {
+    width: 44px; height: 44px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    flex-shrink: 0;
+  }
+
+  .tool-meta { flex: 1; min-width: 0; }
+
+  .tool-name {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    margin-bottom: 0.2rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .tool-category {
+    font-size: 0.75rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .tool-rating {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.82rem;
+    color: #fbbf24;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .tool-desc {
+    font-size: 0.88rem;
+    color: var(--muted);
+    line-height: 1.5;
+    margin-bottom: 1rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .tool-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 1rem;
+  }
+
+  .tag {
+    font-size: 0.72rem;
+    padding: 0.2rem 0.55rem;
+    border-radius: 100px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-weight: 500;
+  }
+
+  .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 0.9rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .tool-price {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+  }
+
+  .price-free { color: #1a7a4a; }
+  .price-paid { color: var(--text); }
+  .price-freemium { color: var(--accent2); }
+
+  .card-actions {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .btn-visit {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 0.4rem 0.9rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .btn-visit:hover { background: var(--accent2); }
+
+  .btn-save {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 0.85rem;
+    padding: 0.4rem 0.6rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .btn-save:hover { color: var(--accent3); border-color: rgba(224,90,90,0.3); }
+
+  /* INTEGRATIONS DOTS */
+  .integrations {
+    display: flex;
+    gap: 0.3rem;
+    align-items: center;
+    margin-bottom: 0.8rem;
+  }
+
+  .int-label { font-size: 0.72rem; color: var(--muted); margin-right: 0.2rem; }
+
+  .int-badge {
+    font-size: 0.7rem;
+    padding: 0.15rem 0.45rem;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--muted);
+  }
+
+  /* BLOG SECTION */
+  .blog-section {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem 4rem;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: flex-end;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  .section-sub {
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-bottom: 0.2rem;
+  }
+
+  .reddit-embed-wrap {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    min-height: 500px;
+    position: relative;
+  }
+
+  .reddit-embed-wrap iframe {
+    width: 100%;
+    min-height: 500px;
+    border: none;
+    display: block;
+  }
+
+  /* MODAL */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(8px);
+    z-index: 500;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    max-width: 600px;
+    width: 100%;
+    max-height: 85vh;
+    overflow-y: auto;
+    padding: 2rem;
+    position: relative;
+    animation: modalIn 0.25s ease;
+  }
+
+  @keyframes modalIn {
+    from { opacity: 0; transform: scale(0.95) translateY(10px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+  }
+
+  .modal-close:hover { color: var(--text); }
+
+  .modal-logo {
+    width: 60px; height: 60px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  .modal h2 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.6rem;
+    font-weight: 800;
+    margin-bottom: 0.3rem;
+  }
+
+  .modal-rating-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    color: var(--muted);
+    font-size: 0.85rem;
+  }
+
+  .modal-desc {
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+  }
+
+  .modal-section-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.6rem;
+  }
+
+  .modal-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .modal-info-box {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.8rem 1rem;
+  }
+
+  .modal-info-label { font-size: 0.75rem; color: var(--muted); margin-bottom: 0.2rem; }
+  .modal-info-value { font-size: 0.95rem; font-weight: 600; }
+
+  .modal-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.5rem; }
+
+  .modal-uses { list-style: none; margin-bottom: 1.5rem; }
+  .modal-uses li {
+    padding: 0.4rem 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.9rem;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .modal-uses li::before { content: '→'; color: var(--accent2); }
+
+  .modal-footer {
+    display: flex;
+    gap: 0.8rem;
+  }
+
+  .btn-primary {
+    flex: 1;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    padding: 0.7rem 1rem;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.15s;
+    text-align: center;
+    text-decoration: none;
+    display: block;
+  }
+
+  .btn-primary:hover { background: var(--accent2); }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 2rem;
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.82rem;
+  }
+
+  footer strong { color: var(--text); }
+
+  /* HIDDEN */
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <div class="nav-dot"></div>
+    AVA <span>AI Tools</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#tools">Tools</a></li>
+    <li><a href="#updates">Updates</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">🤖 Curated AI Directory</div>
+  <h1>Find the <em>right</em> AI tool<br>for every job</h1>
+  <p>Explore the most popular AI tools with real pricing, integrations, ratings, and use cases — all in one place.</p>
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input type="text" id="searchInput" placeholder="Search tools, categories, use cases..." oninput="filterTools()">
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stat">
+    <div class="stat-num" id="totalCount">24</div>
+    <div class="stat-label">Tools listed</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">8</div>
+    <div class="stat-label">Categories</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">Weekly</div>
+    <div class="stat-label">Updates</div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main" id="tools">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="filter-section">
+      <div class="filter-title">Category</div>
+      <button class="filter-btn active" onclick="setCategory('all', this)">
+        🌐 All Tools <span class="filter-count" id="count-all">24</span>
+      </button>
+      <button class="filter-btn" onclick="setCategory('writing', this)">
+        ✍️ Writing <span class="filter-count">5</span>
+      </button>
+      <button class="filter-btn" onclick="setCategory('image', this)">
+        🖼️ Image <span class="filter-count">4</span>
+      </button>
+      <button class="filter-btn" onclick="setCategory('video', this)">
+        🎬 Video <span class="filter-count">3</span>
+      </button>
+      <button class="filter-btn" onclick="setCategory('automation', this)">
+        ⚡ Automation <span class="filter-count">4</span>
+      </button>
+      <button class="filter-btn" onclick="setCategory('coding', this)">
+        💻 Coding <span class="filter-count">3</span>
+      </button>
+      <button class="filter-btn" onclick="setCategory('audio', this)">
+        🎙️ Audio <span class="filter-count">2</span>
+      </button>
+      <button class="filter-btn" onclick="setCategory('productivity', this)">
+        📊 Productivity <span class="filter-count">2</span>
+      </button>
+      <button class="filter-btn" onclick="setCategory('assistant', this)">
+        🤖 AI Assistant <span class="filter-count">1</span>
+      </button>
+    </div>
+
+    <div class="filter-section">
+      <div class="filter-title">Pricing</div>
+      <button class="filter-btn" onclick="setPrice('all', this)">
+        All Pricing
+      </button>
+      <button class="filter-btn" onclick="setPrice('Free', this)">
+        🟢 Free
+      </button>
+      <button class="filter-btn" onclick="setPrice('Freemium', this)">
+        🔵 Freemium
+      </button>
+      <button class="filter-btn" onclick="setPrice('Paid', this)">
+        🟠 Paid
+      </button>
+    </div>
+  </aside>
+
+  <!-- GRID -->
+  <div>
+    <div class="tools-header">
+      <div class="tools-count"><strong id="visibleCount">24</strong> tools</div>
+      <select class="sort-select" onchange="sortTools(this.value)">
+        <option value="rating">Top Rated</option>
+        <option value="name">A–Z</option>
+        <option value="price">Price</option>
+      </select>
+    </div>
+    <div class="tools-grid" id="toolsGrid"></div>
+  </div>
+</div>
+
+<!-- BLOG / UPDATES -->
+<section class="blog-section" id="updates">
+  <div class="section-header">
+    <div>
+      <div class="section-title">AI News & Updates</div>
+      <div class="section-sub">Latest from the AI community · powered by Reddit</div>
+    </div>
+  </div>
+  <div class="reddit-embed-wrap">
+    <iframe
+      src="https://www.reddit.com/r/artificial/hot/.compact"
+      title="r/artificial - AI News"
+      sandbox="allow-scripts allow-same-origin allow-popups"
+      loading="lazy">
+    </iframe>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <strong>AVA AI Tools Marketplace</strong> · Updated weekly · <a href="https://justaskava.com" style="color:var(--accent2);text-decoration:none">justaskava.com</a>
+</footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal" onclick="closeModal(event)">
+  <div class="modal" id="modalContent">
+    <button class="modal-close" onclick="closeModalDirect()">✕</button>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<script>
+const tools = [
+  { id:1, name:"ChatGPT", emoji:"🤖", category:"assistant", price:"Freemium", priceDetail:"Free / $20 mo", rating:4.8, reviews:120, desc:"OpenAI's flagship conversational AI. Handles writing, analysis, coding, math, and much more. The most widely used AI assistant globally.", tags:["OpenAI","GPT-4o","Conversational"], integrations:["API","Zapier","Slack"], uses:["Writing assistance","Code debugging","Research","Customer support","Brainstorming"], url:"https://chat.openai.com" },
+  { id:2, name:"Claude", emoji:"🧠", category:"assistant", price:"Freemium", priceDetail:"Free / $20 mo", rating:4.8, reviews:98, desc:"Anthropic's AI assistant. Excels at long-form writing, nuanced analysis, and safe, thoughtful conversations. Known for accuracy and context handling.", tags:["Anthropic","Safety","Long context"], integrations:["API","Slack","Notion"], uses:["Document analysis","Creative writing","Code review","Research","Automation"], url:"https://claude.ai" },
+  { id:3, name:"Midjourney", emoji:"🎨", category:"image", price:"Paid", priceDetail:"From $10/mo", rating:4.9, reviews:145, desc:"Industry-leading AI image generator known for stunning artistic quality. Creates highly detailed and stylized visuals from text prompts.", tags:["Text-to-image","Art","Discord"], integrations:["Discord","API (beta)"], uses:["Marketing visuals","Concept art","Product mockups","Social media","Illustrations"], url:"https://midjourney.com" },
+  { id:4, name:"DALL·E 3", emoji:"🖼️", category:"image", price:"Freemium", priceDetail:"Free w/ ChatGPT", rating:4.5, reviews:88, desc:"OpenAI's image generation model. Integrated directly into ChatGPT for seamless text-to-image creation with precise prompt adherence.", tags:["OpenAI","Text-to-image","Integrated"], integrations:["ChatGPT","API","Bing"], uses:["Blog images","Presentations","Prototyping","Social posts"], url:"https://openai.com/dall-e-3" },
+  { id:5, name:"Stable Diffusion", emoji:"🌊", category:"image", price:"Free", priceDetail:"Open source", rating:4.4, reviews:76, desc:"Open-source image generation model. Runs locally or in the cloud. Highly customizable with thousands of community models and fine-tunes.", tags:["Open source","Local","Customizable"], integrations:["ComfyUI","A1111","API"], uses:["Custom model training","Batch generation","Local privacy","Art projects"], url:"https://stability.ai" },
+  { id:6, name:"Adobe Firefly", emoji:"🔥", category:"image", price:"Freemium", priceDetail:"Free / $4.99 mo", rating:4.3, reviews:62, desc:"Adobe's commercially safe AI image generator. Deeply integrated into Photoshop and Express. Perfect for teams with commercial rights concerns.", tags:["Adobe","Commercial safe","Photoshop"], integrations:["Photoshop","Express","Illustrator"], uses:["Marketing assets","Brand graphics","Photo editing","Design mockups"], url:"https://firefly.adobe.com" },
+  { id:7, name:"Jasper", emoji:"✍️", category:"writing", price:"Paid", priceDetail:"From $39/mo", rating:4.4, reviews:71, desc:"AI writing assistant built for marketing teams. Generates on-brand content for blogs, ads, email, and social with tone and style controls.", tags:["Marketing","Long-form","Brand voice"], integrations:["Surfer SEO","Grammarly","Google Docs"], uses:["Blog posts","Ad copy","Email campaigns","SEO content","Social media"], url:"https://jasper.ai" },
+  { id:8, name:"Copy.ai", emoji:"📝", category:"writing", price:"Freemium", priceDetail:"Free / $36 mo", rating:4.2, reviews:58, desc:"Fast AI copywriting for marketing content. Great for generating multiple variations of ad copy, product descriptions, and social captions.", tags:["Copywriting","Marketing","Variations"], integrations:["Zapier","HubSpot","API"], uses:["Ad copy","Product descriptions","Email subject lines","Social captions"], url:"https://copy.ai" },
+  { id:9, name:"Grammarly", emoji:"✅", category:"writing", price:"Freemium", priceDetail:"Free / $12 mo", rating:4.6, reviews:134, desc:"AI-powered writing assistant for grammar, style, tone, and clarity. Works across browsers, docs, and email as a real-time writing partner.", tags:["Grammar","Style","Real-time"], integrations:["Chrome","Word","Google Docs","Outlook"], uses:["Proofreading","Tone adjustment","Business writing","Academic writing"], url:"https://grammarly.com" },
+  { id:10, name:"Notion AI", emoji:"📓", category:"writing", price:"Paid", priceDetail:"$8/mo add-on", rating:4.5, reviews:89, desc:"AI built natively into Notion. Summarize pages, draft content, extract action items, and translate — all without leaving your workspace.", tags:["Notion","Integrated","Workspace"], integrations:["Notion","Slack","API"], uses:["Meeting summaries","Content drafting","Q&A from docs","Task extraction","Translation"], url:"https://notion.so/product/ai" },
+  { id:11, name:"Perplexity", emoji:"🔎", category:"writing", price:"Freemium", priceDetail:"Free / $20 mo", rating:4.6, reviews:82, desc:"AI-powered search engine that gives cited, conversational answers. Perfect for research with real-time web access and source transparency.", tags:["Search","Research","Citations"], integrations:["API","Chrome extension"], uses:["Research","Fact-checking","Market analysis","Competitive intel","Learning"], url:"https://perplexity.ai" },
+  { id:12, name:"HeyGen", emoji:"🎬", category:"video", price:"Freemium", priceDetail:"Free / $29 mo", rating:4.7, reviews:93, desc:"AI video generator with realistic avatars and voice cloning. Create professional talking-head videos without filming. Used widely for training and marketing.", tags:["Avatar","Voice clone","Training"], integrations:["Zapier","HubSpot","API"], uses:["Training videos","Marketing content","Multilingual content","Product demos","Personalized outreach"], url:"https://heygen.com" },
+  { id:13, name:"Synthesia", emoji:"🎭", category:"video", price:"Paid", priceDetail:"From $29/mo", rating:4.6, reviews:78, desc:"Create studio-quality AI videos from text with 150+ AI avatars and 120+ languages. Enterprise-grade for L&D and internal comms.", tags:["Avatar","Enterprise","Multilingual"], integrations:["LMS","API","Zapier"], uses:["eLearning","Internal comms","HR onboarding","Product training","Localization"], url:"https://synthesia.io" },
+  { id:14, name:"RunwayML", emoji:"🎞️", category:"video", price:"Freemium", priceDetail:"Free / $15 mo", rating:4.5, reviews:67, desc:"Creative AI platform for video generation and editing. Offers text-to-video, image-to-video, and advanced video editing powered by Gen-2.", tags:["Text-to-video","Gen-2","Creative"], integrations:["Adobe Premiere","API"], uses:["Creative projects","Short films","Video editing","Social content","Product visualization"], url:"https://runwayml.com" },
+  { id:15, name:"Zapier AI", emoji:"⚡", category:"automation", price:"Freemium", priceDetail:"Free / $19.99 mo", rating:4.6, reviews:108, desc:"The leading no-code automation platform with built-in AI actions. Connect 6,000+ apps and use AI to process, classify, and route data automatically.", tags:["No-code","6000+ apps","Workflows"], integrations:["Gmail","Slack","Salesforce","HubSpot","Notion"], uses:["Email automation","Lead routing","Data sync","Notifications","Report generation"], url:"https://zapier.com" },
+  { id:16, name:"Make (Integromat)", emoji:"🔗", category:"automation", price:"Freemium", priceDetail:"Free / $9 mo", rating:4.5, reviews:84, desc:"Visual automation builder for complex multi-step workflows. More powerful than Zapier for technical users who need conditional logic and data manipulation.", tags:["Visual builder","Complex workflows","API"], integrations:["1000+ apps","Webhooks","API","Google Workspace"], uses:["Data processing","Complex routing","API integrations","Batch processing","Reporting"], url:"https://make.com" },
+  { id:17, name:"n8n", emoji:"🔀", category:"automation", price:"Free", priceDetail:"Open source / $20 mo", rating:4.4, reviews:61, desc:"Open-source workflow automation. Self-hostable for full data control. Ideal for technical teams building complex automations with code flexibility.", tags:["Open source","Self-hosted","Developer"], integrations:["400+ nodes","API","Webhooks","Databases"], uses:["Internal tooling","Data pipelines","AI workflows","Custom integrations","Self-hosted privacy"], url:"https://n8n.io" },
+  { id:18, name:"Bardeen", emoji:"🤝", category:"automation", price:"Freemium", priceDetail:"Free / $10 mo", rating:4.3, reviews:47, desc:"AI automation for your browser. Automate repetitive web tasks like scraping, form filling, and data collection without any code.", tags:["Browser","No-code","Scraping"], integrations:["LinkedIn","Salesforce","Airtable","Notion"], uses:["Lead scraping","CRM updates","Data collection","Research automation","Outreach"], url:"https://bardeen.ai" },
+  { id:19, name:"GitHub Copilot", emoji:"💻", category:"coding", price:"Paid", priceDetail:"$10/mo", rating:4.7, reviews:119, desc:"AI pair programmer that suggests code and full functions in real-time inside your editor. Trained on billions of lines of public code.", tags:["GitHub","VS Code","Autocomplete"], integrations:["VS Code","JetBrains","Neovim","GitHub"], uses:["Code completion","Test generation","Docs writing","Refactoring","Learning to code"], url:"https://github.com/features/copilot" },
+  { id:20, name:"Cursor", emoji:"🖱️", category:"coding", price:"Freemium", priceDetail:"Free / $20 mo", rating:4.8, reviews:97, desc:"AI-first code editor built on VS Code. Chat with your codebase, make multi-file edits, and debug with AI that understands your entire project.", tags:["Code editor","Chat","Multi-file"], integrations:["GitHub","Vercel","Claude","GPT-4"], uses:["Full-stack development","Codebase Q&A","Refactoring","Bug fixing","Code explanation"], url:"https://cursor.sh" },
+  { id:21, name:"Tabnine", emoji:"🔮", category:"coding", price:"Freemium", priceDetail:"Free / $12 mo", rating:4.3, reviews:58, desc:"AI code completion that can run locally for full privacy. Supports 30+ languages and integrates with all major IDEs. Enterprise-ready.", tags:["Local","Privacy","Enterprise"], integrations:["VS Code","IntelliJ","Eclipse","Neovim"], uses:["Code completion","Privacy-first teams","Enterprise compliance","Multi-language support"], url:"https://tabnine.com" },
+  { id:22, name:"ElevenLabs", emoji:"🎙️", category:"audio", price:"Freemium", priceDetail:"Free / $5 mo", rating:4.9, reviews:102, desc:"Best-in-class AI voice synthesis and cloning. Create ultra-realistic voiceovers in 29 languages with custom voice clones from just a few seconds of audio.", tags:["Voice clone","TTS","Multilingual"], integrations:["API","Zapier","HeyGen","Make"], uses:["Voiceovers","Podcasts","Audiobooks","Character voices","Multilingual content"], url:"https://elevenlabs.io" },
+  { id:23, name:"Suno", emoji:"🎵", category:"audio", price:"Freemium", priceDetail:"Free / $8 mo", rating:4.6, reviews:74, desc:"AI music generator that creates full songs with vocals and instrumentals from a text prompt. Create professional-quality music in any style instantly.", tags:["Music generation","Vocals","Styles"], integrations:["API (beta)"], uses:["Background music","Jingles","Content creation","Personal projects","Brand audio"], url:"https://suno.ai" },
+  { id:24, name:"Otter.ai", emoji:"📊", category:"productivity", price:"Freemium", priceDetail:"Free / $8.33 mo", rating:4.5, reviews:86, desc:"AI meeting assistant that transcribes, summarizes, and identifies action items from your meetings in real-time. Integrates with Zoom, Teams, and Meet.", tags:["Transcription","Meetings","Action items"], integrations:["Zoom","Teams","Meet","Slack","Salesforce"], uses:["Meeting notes","Action item tracking","Searchable transcripts","Team async updates","CRM sync"], url:"https://otter.ai" },
+];
+
+let currentCategory = 'all';
+let currentPrice = 'all';
+
+function renderTools() {
+  const search = document.getElementById('searchInput').value.toLowerCase();
+  let filtered = tools.filter(t => {
+    const matchCat = currentCategory === 'all' || t.category === currentCategory;
+    const matchPrice = currentPrice === 'all' || t.price === currentPrice;
+    const matchSearch = !search || 
+      t.name.toLowerCase().includes(search) || 
+      t.desc.toLowerCase().includes(search) || 
+      t.tags.some(tag => tag.toLowerCase().includes(search)) ||
+      t.uses.some(u => u.toLowerCase().includes(search));
+    return matchCat && matchPrice && matchSearch;
+  });
+
+  document.getElementById('visibleCount').textContent = filtered.length;
+
+  const grid = document.getElementById('toolsGrid');
+  grid.innerHTML = filtered.map((t, i) => `
+    <div class="tool-card" style="animation-delay:${i * 0.04}s" onclick="openModal(${t.id})">
+      <div class="card-top">
+        <div class="tool-logo" style="background:${logoColor(t.category)}">${t.emoji}</div>
+        <div class="tool-meta">
+          <div class="tool-name">${t.name}</div>
+          <div class="tool-category">${t.category}</div>
+        </div>
+        <div class="tool-rating">★ ${t.rating}</div>
+      </div>
+      <div class="tool-desc">${t.desc}</div>
+      <div class="integrations">
+        <span class="int-label">Integrates:</span>
+        ${t.integrations.slice(0,3).map(i => `<span class="int-badge">${i}</span>`).join('')}
+      </div>
+      <div class="tool-tags">
+        ${t.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+      </div>
+      <div class="card-footer">
+        <div class="tool-price ${priceClass(t.price)}">${t.priceDetail}</div>
+        <div class="card-actions">
+          <button class="btn-save" onclick="event.stopPropagation(); toggleSave(${t.id}, this)" title="Save">♡</button>
+          <a class="btn-visit" href="${t.url}" target="_blank" onclick="event.stopPropagation()">Visit →</a>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function logoColor(cat) {
+  const map = {
+    assistant:'rgba(43,58,143,0.1)', image:'rgba(139,92,246,0.1)',
+    video:'rgba(239,68,68,0.1)', writing:'rgba(59,130,246,0.1)',
+    automation:'rgba(251,146,60,0.1)', coding:'rgba(34,197,94,0.1)',
+    audio:'rgba(236,72,153,0.1)', productivity:'rgba(234,179,8,0.1)'
+  };
+  return map[cat] || 'rgba(30,40,80,0.05)';
+}
+
+function priceClass(price) {
+  if (price === 'Free') return 'price-free';
+  if (price === 'Freemium') return 'price-freemium';
+  return 'price-paid';
+}
+
+function setCategory(cat, btn) {
+  currentCategory = cat;
+  document.querySelectorAll('.sidebar .filter-btn').forEach(b => {
+    if (b.onclick.toString().includes("setCategory")) b.classList.remove('active');
+  });
+  btn.classList.add('active');
+  renderTools();
+}
+
+function setPrice(price, btn) {
+  currentPrice = price;
+  document.querySelectorAll('.sidebar .filter-btn').forEach(b => {
+    if (b.onclick.toString().includes("setPrice")) b.classList.remove('active');
+  });
+  btn.classList.add('active');
+  renderTools();
+}
+
+function filterTools() { renderTools(); }
+
+function sortTools(by) {
+  if (by === 'rating') tools.sort((a,b) => b.rating - a.rating);
+  else if (by === 'name') tools.sort((a,b) => a.name.localeCompare(b.name));
+  else if (by === 'price') tools.sort((a,b) => {
+    const order = { Free:0, Freemium:1, Paid:2 };
+    return order[a.price] - order[b.price];
+  });
+  renderTools();
+}
+
+function openModal(id) {
+  const t = tools.find(x => x.id === id);
+  document.getElementById('modalBody').innerHTML = `
+    <div class="modal-logo" style="background:${logoColor(t.category)}">${t.emoji}</div>
+    <h2>${t.name}</h2>
+    <div class="modal-rating-row">
+      <span style="color:#fbbf24">★ ${t.rating}</span>
+      <span>${t.reviews} reviews</span>
+      <span style="text-transform:uppercase;font-size:0.75rem;letter-spacing:0.06em">${t.category}</span>
+    </div>
+    <p class="modal-desc">${t.desc}</p>
+
+    <div class="modal-section-title">Pricing & Details</div>
+    <div class="modal-grid">
+      <div class="modal-info-box">
+        <div class="modal-info-label">Price</div>
+        <div class="modal-info-value ${priceClass(t.price)}">${t.priceDetail}</div>
+      </div>
+      <div class="modal-info-box">
+        <div class="modal-info-label">Type</div>
+        <div class="modal-info-value">${t.price}</div>
+      </div>
+    </div>
+
+    <div class="modal-section-title">Tags</div>
+    <div class="modal-tags">
+      ${t.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+    </div>
+
+    <div class="modal-section-title">Integrations</div>
+    <div class="modal-tags" style="margin-bottom:1.5rem">
+      ${t.integrations.map(i => `<span class="tag">${i}</span>`).join('')}
+    </div>
+
+    <div class="modal-section-title">Common Use Cases</div>
+    <ul class="modal-uses">
+      ${t.uses.map(u => `<li>${u}</li>`).join('')}
+    </ul>
+
+    <div class="modal-footer">
+      <a class="btn-primary" href="${t.url}" target="_blank">Visit ${t.name} →</a>
+    </div>
+  `;
+  document.getElementById('modal').classList.add('open');
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById('modal')) closeModalDirect();
+}
+
+function closeModalDirect() {
+  document.getElementById('modal').classList.remove('open');
+}
+
+function toggleSave(id, btn) {
+  btn.textContent = btn.textContent === '♡' ? '♥' : '♡';
+  btn.style.color = btn.textContent === '♥' ? 'var(--accent3)' : '';
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModalDirect();
+});
+
+renderTools();
+</script>
+</body>
+</html>
