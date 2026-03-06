@@ -1,127 +1,198 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI Tools Marketplace — Just Ask AVA</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css">
-</head>
-<body>
-
-  <!-- NAV -->
-  <nav>
-    <div class="nav-logo">
-      <div class="nav-dot"></div>
-      AVA <span>AI Tools</span>
-    </div>
-    <ul class="nav-links">
-      <li><a href="#tools">Tools</a></li>
-      <li><a href="#updates">Updates</a></li>
-    </ul>
-  </nav>
-
-  <!-- HERO -->
-  <section class="hero">
-    <div class="hero-badge">🤖 Curated AI Directory</div>
-    <h1>Find the <em>right</em> AI tool<br>for every job</h1>
-    <p>Explore the most popular AI tools with real pricing, integrations, ratings, and use cases — all in one place.</p>
-    <div class="search-wrap">
-      <span class="search-icon">🔍</span>
-      <input type="text" id="searchInput" placeholder="Search tools, categories, use cases..." oninput="filterTools()">
-    </div>
-  </section>
-
-  <!-- STATS -->
-  <div class="stats">
-    <div class="stat">
-      <div class="stat-num">24</div>
-      <div class="stat-label">Tools listed</div>
-    </div>
-    <div class="stat">
-      <div class="stat-num">8</div>
-      <div class="stat-label">Categories</div>
-    </div>
-    <div class="stat">
-      <div class="stat-num">Weekly</div>
-      <div class="stat-label">Updates</div>
-    </div>
-  </div>
-
-  <!-- MAIN: SIDEBAR + GRID -->
-  <div class="main" id="tools">
-
-    <!-- SIDEBAR FILTERS -->
-    <aside class="sidebar">
-      <div class="filter-section">
-        <div class="filter-title">Category</div>
-        <button class="filter-btn active" onclick="setCategory('all', this)">🌐 All Tools <span class="filter-count">24</span></button>
-        <button class="filter-btn" onclick="setCategory('writing', this)">✍️ Writing <span class="filter-count">5</span></button>
-        <button class="filter-btn" onclick="setCategory('image', this)">🖼️ Image <span class="filter-count">4</span></button>
-        <button class="filter-btn" onclick="setCategory('video', this)">🎬 Video <span class="filter-count">3</span></button>
-        <button class="filter-btn" onclick="setCategory('automation', this)">⚡ Automation <span class="filter-count">4</span></button>
-        <button class="filter-btn" onclick="setCategory('coding', this)">💻 Coding <span class="filter-count">3</span></button>
-        <button class="filter-btn" onclick="setCategory('audio', this)">🎙️ Audio <span class="filter-count">2</span></button>
-        <button class="filter-btn" onclick="setCategory('productivity', this)">📊 Productivity <span class="filter-count">2</span></button>
-        <button class="filter-btn" onclick="setCategory('assistant', this)">🤖 AI Assistant <span class="filter-count">2</span></button>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Tools Marketplace — Just Ask AVA</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <!-- HEADER -->
+    <header class="header">
+      <div class="header-inner">
+        <div class="logo">
+          <span class="logo-dot"></span>
+          AVA AI Tools
+        </div>
+        <div class="header-search">
+          <input
+            type="text"
+            id="searchInput"
+            class="search-input"
+            placeholder="Search tools, categories, use cases..."
+            oninput="filterTools()"
+          />
+        </div>
+        <a class="header-link" href="https://justaskava.com" target="_blank"
+          >justaskava.com →</a
+        >
       </div>
+    </header>
 
-      <div class="filter-section">
-        <div class="filter-title">Pricing</div>
-        <button class="filter-btn" onclick="setPrice('all', this)">All Pricing</button>
-        <button class="filter-btn" onclick="setPrice('Free', this)">🟢 Free</button>
-        <button class="filter-btn" onclick="setPrice('Freemium', this)">🔵 Freemium</button>
-        <button class="filter-btn" onclick="setPrice('Paid', this)">🟠 Paid</button>
+    <!-- HERO -->
+    <section class="hero">
+      <h1 class="hero-title">
+        Discover the Best <span class="hero-accent">AI Tools</span>
+      </h1>
+      <p class="hero-sub">
+        Curated by Just Ask AVA — updated weekly with the tools that actually
+        matter.
+      </p>
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-num" id="totalToolsCount">—</div>
+          <div class="stat-label">Tools Listed</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">8</div>
+          <div class="stat-label">Categories</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">Weekly</div>
+          <div class="stat-label">Updates</div>
+        </div>
       </div>
-    </aside>
+    </section>
 
-    <!-- TOOLS GRID -->
-    <div>
-      <div class="tools-header">
-        <div class="tools-count"><strong id="visibleCount">24</strong> tools</div>
-        <select class="sort-select" onchange="sortTools(this.value)">
-          <option value="rating">Top Rated</option>
-          <option value="name">A–Z</option>
-          <option value="price">Price</option>
-        </select>
+    <!-- MOBILE FILTER TOGGLE -->
+    <div class="mobile-filter-bar">
+      <button class="mobile-filter-toggle" onclick="toggleSidebar()">
+        ☰ Filters
+      </button>
+      <select class="sort-select" onchange="sortTools(this.value)">
+        <option value="rating">Top Rated</option>
+        <option value="name">A – Z</option>
+        <option value="price">Price</option>
+      </select>
+    </div>
+
+    <!-- MAIN -->
+    <div class="main" id="tools">
+      <!-- SIDEBAR -->
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-inner">
+          <button class="sidebar-close" onclick="toggleSidebar()">
+            ✕ Close
+          </button>
+
+          <div class="filter-section">
+            <div class="filter-title">Category</div>
+            <button
+              class="filter-btn active"
+              onclick="setCategory('all', this)"
+            >
+              🌐 All Tools <span class="filter-count" id="count-all">—</span>
+            </button>
+            <button class="filter-btn" onclick="setCategory('writing', this)">
+              ✍️ Writing
+              <span class="filter-count" data-category="writing">—</span>
+            </button>
+            <button class="filter-btn" onclick="setCategory('image', this)">
+              🖼️ Image <span class="filter-count" data-category="image">—</span>
+            </button>
+            <button class="filter-btn" onclick="setCategory('video', this)">
+              🎬 Video <span class="filter-count" data-category="video">—</span>
+            </button>
+            <button
+              class="filter-btn"
+              onclick="setCategory('automation', this)"
+            >
+              ⚡ Automation
+              <span class="filter-count" data-category="automation">—</span>
+            </button>
+            <button class="filter-btn" onclick="setCategory('coding', this)">
+              💻 Coding
+              <span class="filter-count" data-category="coding">—</span>
+            </button>
+            <button class="filter-btn" onclick="setCategory('audio', this)">
+              🎧 Audio <span class="filter-count" data-category="audio">—</span>
+            </button>
+            <button
+              class="filter-btn"
+              onclick="setCategory('productivity', this)"
+            >
+              📊 Productivity
+              <span class="filter-count" data-category="productivity">—</span>
+            </button>
+            <button class="filter-btn" onclick="setCategory('assistant', this)">
+              🤖 AI Assistant
+              <span class="filter-count" data-category="assistant">—</span>
+            </button>
+          </div>
+
+          <div class="filter-section">
+            <div class="filter-title">Pricing</div>
+            <button class="filter-btn active" onclick="setPrice('all', this)">
+              All Pricing
+            </button>
+            <button class="filter-btn" onclick="setPrice('Free', this)">
+              <span class="price-dot free"></span> Free
+            </button>
+            <button class="filter-btn" onclick="setPrice('Freemium', this)">
+              <span class="price-dot freemium"></span> Freemium
+            </button>
+            <button class="filter-btn" onclick="setPrice('Paid', this)">
+              <span class="price-dot paid"></span> Paid
+            </button>
+          </div>
+        </div>
+      </aside>
+
+      <!-- SIDEBAR OVERLAY (mobile) -->
+      <div
+        class="sidebar-overlay"
+        id="sidebarOverlay"
+        onclick="toggleSidebar()"
+      ></div>
+
+      <!-- CONTENT -->
+      <div class="content">
+        <div class="toolbar">
+          <div class="results-count">
+            <span id="visibleCount">—</span> tools
+          </div>
+          <select
+            class="sort-select desktop-sort"
+            onchange="sortTools(this.value)"
+          >
+            <option value="rating">Top Rated</option>
+            <option value="name">A – Z</option>
+            <option value="price">Price</option>
+          </select>
+        </div>
+
+        <div class="tools-grid" id="toolsGrid"></div>
       </div>
-      <div class="tools-grid" id="toolsGrid"></div>
     </div>
 
-  </div>
+    <!-- FOOTER -->
+    <footer class="footer">
+      <div class="footer-inner">
+        <div class="footer-logo">
+          <span class="logo-dot small"></span> AVA AI Tools
+        </div>
+        <p class="footer-text">
+          Curated by
+          <a href="https://justaskava.com" target="_blank">Just Ask AVA</a> ·
+          Updated weekly
+        </p>
+      </div>
+    </footer>
 
-  <!-- UPDATES / BLOG -->
-  <section class="blog-section" id="updates">
-    <div class="section-header">
-      <div>
-        <div class="section-title">AI News & Updates</div>
-        <div class="section-sub">Latest from the AI community · powered by Reddit</div>
+    <!-- MODAL -->
+    <div class="modal" id="modal" onclick="closeModal(event)">
+      <div class="modal-box">
+        <button class="modal-close" onclick="closeModalDirect()">✕</button>
+        <div id="modalBody"></div>
       </div>
     </div>
-    <div class="reddit-embed-wrap">
-      <iframe
-        src="https://www.reddit.com/r/artificial/hot/.compact"
-        title="r/artificial - AI News"
-        sandbox="allow-scripts allow-same-origin allow-popups"
-        loading="lazy">
-      </iframe>
-    </div>
-  </section>
 
-  <!-- FOOTER -->
-  <footer>
-    <strong>AVA AI Tools Marketplace</strong> · Updated weekly ·
-    <a href="https://justaskava.com" style="color:var(--accent2);text-decoration:none">justaskava.com</a>
-  </footer>
-
-  <!-- MODAL -->
-  <div class="modal-overlay" id="modal" onclick="closeModal(event)">
-    <div class="modal" id="modalContent">
-      <button class="modal-close" onclick="closeModalDirect()">✕</button>
-      <div id="modalBody"></div>
-    </div>
-  </div>
-
-  <script src="js/app.js"></script>
-</body>
+    <script src="js/app.js"></script>
+  </body>
 </html>
