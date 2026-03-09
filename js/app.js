@@ -4,7 +4,7 @@
    ============================================================ */
 
 const SHEET_URL =
-  "https://docs.google.com/spreadsheets/d/e/2PACX-1vRS3Nr_JX47-jMQTSuz7BD8v5zMfP-qyr0EgCnCq2XJ-6qvM01mHAoEmXJ1Y1B6R4oqkYKBkjq41bbM/pub?gid=1295646484&single=true&output=csv";
+  "https://docs.google.com/spreadsheets/d/e/2PACX-1vRS3Nr_JX47-jMQTSuz7BD8v5zMfP-qyr0EgCnCq2XJ-6qvM01mHAoEmXJ1Y1B6R4oqkYKBkjq41bbM/pub?gid=1762992581&single=true&output=csv";
 
 /* --- STATE --- */
 let allTools = [];
@@ -30,6 +30,28 @@ function priceClass(price) {
   if (price === "Free") return "price-free";
   if (price === "Freemium") return "price-freemium";
   return "price-paid";
+}
+
+/* Security badge — returns emoji + label + CSS class */
+function securityBadge(compliance) {
+  if (!compliance) return { icon: "⚪", label: "Unknown", cls: "sec-unknown" };
+  const c = compliance.toLowerCase();
+  if (c.includes("enterprise-grade"))
+    return { icon: "🟢", label: "Enterprise-grade", cls: "sec-enterprise" };
+  if (c.includes("business-grade"))
+    return { icon: "🟡", label: "Business-grade", cls: "sec-business" };
+  return { icon: "🔴", label: "Standard", cls: "sec-standard" };
+}
+
+function updateRiskBadge(risk) {
+  if (!risk) return { cls: "risk-unknown", label: "Unknown" };
+  const r = risk.toLowerCase();
+  if (r.startsWith("low")) return { cls: "risk-low", label: "Low update risk" };
+  if (r.startsWith("medium"))
+    return { cls: "risk-medium", label: "Medium update risk" };
+  if (r.startsWith("high"))
+    return { cls: "risk-high", label: "High update risk" };
+  return { cls: "risk-unknown", label: risk };
 }
 
 /* --- CSV PARSER (handles commas inside quoted fields) --- */
@@ -83,10 +105,20 @@ async function loadFromNotion() {
           tags: get("Tags").split("|").filter(Boolean),
           integrations: get("Integrations").split("|").filter(Boolean),
           uses: get("Uses").split("|").filter(Boolean),
+          // Security fields
+          creator: get("Creator"),
+          creatorVerified: get("Creator Verified"),
+          founded: get("Founded"),
+          dataPolicy: get("Data Policy"),
+          compliance: get("Compliance"),
+          openSource: get("Open Source"),
+          stability: get("Stability"),
+          securityNotes: get("Security Notes"),
+          updateRisk: get("Update Risk"),
           emoji: "🤖",
         };
       })
-      .filter((t) => t.name); // remove empty rows
+      .filter((t) => t.name);
 
     // Update total count in hero stats
     const totalEl = document.getElementById("totalToolsCount");
@@ -144,8 +176,9 @@ function renderTools() {
   }
 
   document.getElementById("toolsGrid").innerHTML = filtered
-    .map(
-      (t, i) => `
+    .map((t, i) => {
+      const badge = securityBadge(t.compliance);
+      return `
     <div class="tool-card" style="animation-delay:${i * 0.04}s" onclick="openModal(${t.id})">
       <div class="card-top">
         <div class="tool-logo" style="background:${logoColor(t.category)}">
@@ -174,15 +207,17 @@ function renderTools() {
         ${t.tags.map((tag) => `<span class="tag">${tag}</span>`).join("")}
       </div>
       <div class="card-footer">
-        <div class="tool-price ${priceClass(t.price)}">${t.priceDetail}</div>
+        <div style="display:flex;flex-direction:column;gap:0.3rem">
+          <div class="tool-price ${priceClass(t.price)}">${t.priceDetail}</div>
+          <span class="sec-badge ${badge.cls}">${badge.icon} ${badge.label}</span>
+        </div>
         <div class="card-actions">
           <button class="btn-save" onclick="event.stopPropagation(); toggleSave(${t.id}, this)" title="Save">♡</button>
           <a class="btn-visit" href="${t.url}" target="_blank" onclick="event.stopPropagation()">Visit →</a>
         </div>
       </div>
-    </div>
-  `,
-    )
+    </div>`;
+    })
     .join("");
 }
 
@@ -237,6 +272,9 @@ function openModal(id) {
   const t = allTools.find((x) => x.id === id);
   if (!t) return;
 
+  const badge = securityBadge(t.compliance);
+  const risk = updateRiskBadge(t.updateRisk);
+
   document.getElementById("modalBody").innerHTML = `
     <div class="modal-logo" style="background:${logoColor(t.category)}">
       <img src="${t.logo}" alt="${t.name}"
@@ -250,6 +288,44 @@ function openModal(id) {
       <span style="text-transform:uppercase;font-size:0.75rem;letter-spacing:0.06em">${t.category}</span>
     </div>
     <p class="modal-desc">${t.desc}</p>
+
+    <div class="modal-section-title">Creator & Verification</div>
+    <div class="modal-grid">
+      <div class="modal-info-box">
+        <div class="modal-info-label">Creator</div>
+        <div class="modal-info-value" style="font-size:0.82rem">${t.creator || "—"}</div>
+      </div>
+      <div class="modal-info-box">
+        <div class="modal-info-label">Founded</div>
+        <div class="modal-info-value">${t.founded || "—"} ${t.creatorVerified === "Yes" ? "✅ Verified" : "⚠️ Unverified"}</div>
+      </div>
+    </div>
+
+    <div class="modal-section-title">Security & Compliance</div>
+    <div class="modal-grid" style="margin-bottom:1rem">
+      <div class="modal-info-box">
+        <div class="modal-info-label">Compliance Level</div>
+        <div class="modal-info-value"><span class="sec-badge ${badge.cls}">${badge.icon} ${badge.label}</span></div>
+      </div>
+      <div class="modal-info-box">
+        <div class="modal-info-label">Certifications</div>
+        <div class="modal-info-value" style="font-size:0.8rem">${t.dataPolicy || "—"}</div>
+      </div>
+    </div>
+    <div class="modal-grid" style="margin-bottom:1rem">
+      <div class="modal-info-box">
+        <div class="modal-info-label">Open Source</div>
+        <div class="modal-info-value">${t.openSource === "Yes" ? "✅ Yes" : "🔒 No"}</div>
+      </div>
+      <div class="modal-info-box">
+        <div class="modal-info-label">Update Risk</div>
+        <div class="modal-info-value"><span class="risk-badge ${risk.cls}">${risk.label}</span></div>
+      </div>
+    </div>
+
+    <div class="modal-section-title">⚠️ Security Notes</div>
+    <div class="security-notes-box">${t.securityNotes || "No specific security notes available."}</div>
+
     <div class="modal-section-title">Pricing & Details</div>
     <div class="modal-grid">
       <div class="modal-info-box">
@@ -261,6 +337,7 @@ function openModal(id) {
         <div class="modal-info-value">${t.price}</div>
       </div>
     </div>
+
     <div class="modal-section-title">Tags</div>
     <div class="modal-tags">
       ${t.tags.map((tag) => `<span class="tag">${tag}</span>`).join("")}
@@ -301,36 +378,6 @@ document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") closeModalDirect();
 });
 
-/* --- REDDIT FEED --- */
-async function loadReddit() {
-  try {
-    const res = await fetch(
-      "https://www.reddit.com/r/artificial/hot.json?limit=10",
-    );
-    const data = await res.json();
-    document.getElementById("redditFeed").innerHTML = data.data.children
-      .map((p) => {
-        const post = p.data;
-        return `
-        <a class="reddit-post" href="https://reddit.com${post.permalink}" target="_blank">
-          <div class="reddit-post-title">${post.title}</div>
-          <div class="reddit-post-meta">
-            <span>⬆️ ${post.ups.toLocaleString()}</span>
-            <span>💬 ${post.num_comments} comments</span>
-            <span>u/${post.author}</span>
-          </div>
-        </a>`;
-      })
-      .join("");
-  } catch (e) {
-    document.getElementById("redditFeed").innerHTML =
-      '<p style="color:var(--muted);padding:1rem">Could not load posts. <a href="https://reddit.com/r/artificial" target="_blank">Visit Reddit →</a></p>';
-  }
-}
-
-/* --- INIT --- */
-loadFromNotion();
-
 /* --- SIDEBAR TOGGLE (mobile) --- */
 function toggleSidebar() {
   const sidebar = document.getElementById("sidebar");
@@ -338,3 +385,6 @@ function toggleSidebar() {
   sidebar.classList.toggle("open");
   overlay.classList.toggle("visible");
 }
+
+/* --- INIT --- */
+loadFromNotion();
