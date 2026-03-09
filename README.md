@@ -115,12 +115,6 @@ npx live-server
 python3 -m http.server 5500
 ```
 
-### Production (Recommended: Netlify)
-1. Connect your GitHub repo to [Netlify](https://netlify.com)
-2. Build command: *(leave blank)*
-3. Publish directory: `/` (root)
-4. Deploy — Netlify handles HTTPS and CDN automatically
-
 > ⚠️ **Note on CORS:** The Google Sheets CSV fetch may be blocked when running on `localhost` in some browsers. The site works correctly when deployed to a public domain (Netlify, GitHub Pages, etc.).
 
 ---
